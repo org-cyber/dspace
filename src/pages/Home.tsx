@@ -1,0 +1,222 @@
+import { useState } from "react";
+import { CreatePod } from "../components/Pod/CreatePod.tsx";
+import { ChatRoom } from "../components/Chat/ChatRoom.tsx";
+import { PodList } from "../components/Pod/PodList.tsx";
+import { ConnectButton, useCurrentAccount, useWallets, useConnectWallet } from "@mysten/dapp-kit";
+import { ExternalLink, Info, Globe, Zap } from "lucide-react";
+
+export function Home() {
+    const [podId, setPodId] = useState<string | null>(null);
+    const [joinId, setJoinId] = useState("");
+    const account = useCurrentAccount();
+    const [isIframe] = useState(() => window.self !== window.top);
+
+    const wallets = useWallets();
+    const { mutate: connect } = useConnectWallet();
+
+    const handleWebLogin = () => {
+        console.log("Available wallets:", wallets.map(w => w.name));
+        // Look for Stashed or similar web wallets
+        const webWallet = wallets.find(w => w.name.toLowerCase().includes('stashed') || w.name.toLowerCase().includes('google'));
+
+        if (webWallet) {
+            connect({ wallet: webWallet });
+        } else {
+            // Fallback to Burner if available
+            const burner = wallets.find(w => w.name.toLowerCase().includes('burner'));
+            if (burner) {
+                if (confirm("Stashed (Google) wallet not detected. Connect with a temporary Burner Wallet instead?")) {
+                    connect({ wallet: burner });
+                }
+            } else {
+                alert(`Web wallet not found. Available wallets: ${wallets.map(w => w.name).join(', ') || 'None'}. Please try 'Open in New Tab'.`);
+            }
+        }
+    };
+
+    const handleMetaMaskLogin = () => {
+        if (isIframe) {
+            if (confirm("MetaMask cannot be detected in this preview window due to browser security restrictions. Open in a new tab to connect?")) {
+                window.open(window.location.href, "_blank");
+            }
+            return;
+        }
+
+        const metamask = wallets.find(w => w.name.toLowerCase().includes('metamask'));
+        if (metamask) {
+            connect({ wallet: metamask });
+        } else {
+            if (confirm("MetaMask Sui Snap not detected in your wallet list. \n\n1. Ensure you have MetaMask installed.\n2. Ensure you have the Sui Snap installed.\n3. Ensure you are NOT in Incognito mode.\n\nWould you like to install the Sui Snap now?")) {
+                window.open("https://snaps.metamask.io/snap/npm/mysten/sui-snap/", "_blank");
+            }
+        }
+    };
+
+    if (!account) {
+        return (
+            <div className="flex-col center-content" style={{ minHeight: '100vh', padding: '1rem', position: 'relative', overflow: 'hidden' }}>
+                {/* Animated Background Elements */}
+                <div className="particles">
+                    {/* Particles implementation handled in CSS or strictly visual divs */}
+                </div>
+
+                {/* Main Content */}
+                <div className="glass-card animate-slide-in-up" style={{ width: '100%', maxWidth: '480px', textAlign: 'center' }}>
+                    {/* Logo/Title */}
+                    <div style={{ marginBottom: '2rem' }}>
+                        <h1 className="gradient-text animate-gradient" style={{ fontSize: '3rem', marginBottom: '1rem' }}>
+                            Sui Pod Chat
+                        </h1>
+                        <p className="text-secondary">Connect your wallet to start chatting</p>
+                    </div>
+
+                    <div className="flex-col gap-4">
+                        <div className="w-full">
+                            <ConnectButton className="w-full" />
+                        </div>
+
+                        <div className="flex-row center-content" style={{ margin: '1rem 0' }}>
+                            <span className="text-muted text-xs font-medium">OR LOGIN WITH</span>
+                        </div>
+
+                        <button
+                            onClick={handleWebLogin}
+                            className="btn btn-secondary w-full"
+                        >
+                            <Globe size={20} />
+                            <span>Google / Burner</span>
+                        </button>
+
+                        <button
+                            onClick={handleMetaMaskLogin}
+                            className="btn btn-secondary w-full"
+                        >
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" style={{ width: '20px', height: '20px' }} />
+                            <span>MetaMask</span>
+                        </button>
+
+                        <div className="glass w-full" style={{ padding: '1rem', borderRadius: 'var(--radius-md)', textAlign: 'left' }}>
+                            <div className="flex-row" style={{ alignItems: 'flex-start' }}>
+                                <Zap size={16} style={{ color: '#facc15', marginTop: '2px' }} />
+                                <span className="text-xs text-muted">
+                                    <strong style={{ color: '#facc15' }}>Burner Wallet Enabled:</strong> Use a temporary wallet for instant access.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* iframe Warning */}
+                {isIframe && (
+                    <div className="glass-card animate-scale-in" style={{ marginTop: '2rem', border: '1px solid rgba(234, 179, 8, 0.3)' }}>
+                        <h3 className="flex-row" style={{ color: '#facc15', marginBottom: '0.75rem' }}>
+                            <Info size={20} />
+                            Wallet Not Detected?
+                        </h3>
+                        <p className="text-sm text-muted" style={{ marginBottom: '1rem' }}>
+                            Browser extensions cannot run inside the preview frame.
+                            Please open the app in a new tab.
+                        </p>
+                        <a
+                            href={window.location.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-primary"
+                        >
+                            <ExternalLink size={18} />
+                            Open in New Tab
+                        </a>
+                    </div>
+                )}
+            </div>
+        );
+    }
+
+    if (podId) {
+        return (
+            <div className="container" style={{ minHeight: '100vh' }}>
+                <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+                    <div className="justify-between flex-row" style={{ marginBottom: '1rem' }}>
+                        <button onClick={() => setPodId(null)} className="btn btn-secondary text-xs">Back to Dashboard</button>
+                        <ConnectButton />
+                    </div>
+                    <ChatRoom podId={podId} onExit={() => setPodId(null)} />
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="container" style={{ minHeight: '100vh', paddingBottom: '2rem' }}>
+            {/* Header */}
+            <div className="glass-panel sticky" style={{ top: '1rem', zIndex: 100, padding: '1.5rem', marginBottom: '2rem' }}>
+                <div className="justify-between flex-row">
+                    <div className="flex-row">
+                        <div style={{ padding: '0.5rem', background: 'linear-gradient(to top right, #a855f7, #06b6d4)', borderRadius: '0.5rem' }}>
+                            <Zap className="text-white" size={24} />
+                        </div>
+                        <h1 className="text-2xl text-white">
+                            <span style={{ opacity: 0.8 }}>Sui</span>
+                            <span className="gradient-text">Pods</span>
+                        </h1>
+                    </div>
+                    <ConnectButton />
+                </div>
+            </div>
+
+            <div className="dashboard-grid animate-slide-in-up">
+                {/* Sidebar / Command Center */}
+                <div className="flex-col sidebar">
+                    {/* Create Pod Section */}
+                    <div className="relative">
+                        <CreatePod onCreated={(id) => setPodId(id)} />
+                    </div>
+
+                    {/* Join Pod Section */}
+                    <div className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden' }}>
+                        <div style={{ position: 'absolute', top: 0, right: 0, padding: '1rem', opacity: 0.1 }}>
+                            <Globe size={100} />
+                        </div>
+                        <h2 className="text-xl text-white flex-row" style={{ marginBottom: '1rem', position: 'relative', zIndex: 1 }}>
+                            🔗 Join a Pod
+                        </h2>
+                        <p className="text-sm text-secondary" style={{ marginBottom: '1rem', position: 'relative', zIndex: 1 }}>
+                            Have an ID? Paste it below to jump straight into the action.
+                        </p>
+                        <div className="flex-row" style={{ position: 'relative', zIndex: 1 }}>
+                            <input
+                                type="text"
+                                value={joinId}
+                                onChange={(e) => setJoinId(e.target.value)}
+                                placeholder="Enter Object ID..."
+                                className="input-field font-mono text-sm"
+                            />
+                            <button
+                                onClick={() => {
+                                    if (joinId.trim()) setPodId(joinId.trim());
+                                }}
+                                className="btn btn-primary"
+                            >
+                                Go
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Main Content / Marketplace */}
+                <div className="main-content">
+                    <div className="justify-between flex-row" style={{ marginBottom: '1.5rem' }}>
+                        <h2 className="text-2xl text-white flex-row">
+                            <span className="text-2xl">📡</span>
+                            Active Pods
+                        </h2>
+                        <div className="text-sm text-secondary glass" style={{ padding: '0.25rem 0.75rem', borderRadius: '50px' }}>
+                            Live Feed
+                        </div>
+                    </div>
+                    <PodList onJoin={(id) => setPodId(id)} />
+                </div>
+            </div>
+        </div>
+    );
+}
