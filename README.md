@@ -1,75 +1,120 @@
-# React + TypeScript + Vite
+# DSpace2 - Sui Pod Chat
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A decentralized collaboration and chat platform built on the **Sui Blockchain**, featuring real-time messaging, pod-based group management, and seamless crypto payments.
 
-Currently, two official plugins are available:
+![Sui](https://img.shields.io/badge/Blockchain-Sui-blue?style=for-the-badge&logo=sui)
+![React](https://img.shields.io/badge/Frontend-React-61DAFB?style=for-the-badge&logo=react)
+![Vite](https://img.shields.io/badge/Build-Vite-646CFF?style=for-the-badge&logo=vite)
+![Firebase](https://img.shields.io/badge/Backend-Firebase-FFCA28?style=for-the-badge&logo=firebase)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Features
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+### 🔐 Decentralized Identity
+- **Connect Wallet**: Sign in seamlessly using any standard Sui wallet (Suiet, Ethos, etc.) via `@mysten/dapp-kit`.
+- **On-Chain Access**: Pod membership is verified transparently on the blockchain.
 
-Note: This will impact Vite dev & build performances.
+### 👥 Pods & Groups
+- **Create Pods**: Launch your own collaborative spaces (Pods) with a single transaction.
+- **Manage Members**: Add contributors by their wallet address.
+- **Glassmorphic UI**: Experience a premium, modern interface fully styled with advanced Vanilla CSS (no Tailwind dependency).
 
-## Expanding the ESLint configuration
+### 💬 Real-Time Chat
+- **Live Messaging**: Powered by Firebase Realtime Database for instant communication.
+- **Secure Context**: Only active pods and members can interact.
+- **History Management**: Clear chat history or delete entire pods with admin controls.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 💸 Crypto Payments (Coming Soon)
+- **Direct Transfers**: Send SUI tokens directly to pod members without leaving the chat interface.
+- **Integrated Controls**: Manage funds and payments from the Pod Dashboard.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🛠️ Technology Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **Frontend Framework**: React 19 + TypeScript
+- **Build Tool**: Vite
+- **Blockchain SDK**: `@mysten/dapp-kit`, `@mysten/sui`
+- **Realtime / Storage**: Firebase Realtime Database
+- **Styling**: Vanilla CSS (Semantic Classes, Variables, Glassmorphism)
+- **Icons**: Lucide React
+
+---
+
+## 📦 Installation & Setup
+
+### Prerequisites
+- **Node.js** (v18+)
+- **npm** or **yarn**
+- **Sui Wallet Extension** (e.g., Sui Wallet, Suiet)
+
+### 1. Clone the Repository
+```bash
+git clone <repository-url>
+cd dspace2
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 2. Install Dependencies
+```bash
+npm install
 ```
+
+### 3. Configure Firebase
+Create a `src/lib/firebase.ts` file with your configuration:
+```typescript
+import { initializeApp } from "firebase/app";
+import { getDatabase } from "firebase/database";
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  databaseURL: "YOUR_DATABASE_URL",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+export const db = getDatabase(app);
+```
+
+### 4. Run Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+---
+
+## 🏗️ Project Structure
+
+```
+src/
+├── components/
+│   ├── Chat/          # ChatRoom, MessageList, MessageInput
+│   ├── Pod/           # CreatePod, PodList, PodCard, PodControls
+│   └── Providers.tsx  # Sui, Query, and Context providers
+├── lib/
+│   ├── firebase.ts    # Firebase initialization
+│   ├── sui.ts         # Sui Network & Package constants
+│   └── utils.ts       # Helper functions
+├── pages/
+│   └── Home.tsx       # Main dashboard layout
+├── App.tsx            # Root component
+├── main.tsx           # Entry point
+└── index.css          # Global Semantic CSS & Variables
+```
+
+## 🎨 Styling System
+The project uses a custom **Vanilla CSS** system defined in `index.css`. Key classes include:
+- `.glass-card`: Premium glassmorphism effect for panels.
+- `.dashboard-grid`: Responsive 12-column grid layout.
+- `.btn-primary` / `.btn-secondary`: Standardized buttons with gradients and hover effects.
+- `.input-field`: Polished form inputs.
+
+---
+
+## 📝 License
+This project is open-source and available under the MIT License.
