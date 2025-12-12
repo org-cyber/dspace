@@ -1,4 +1,4 @@
-# DSpace2 - Sui Pod Chat
+# DSpace - SuiPod Chat
 
 A decentralized collaboration and chat platform built on the **Sui Blockchain**, featuring real-time messaging, pod-based group management, and seamless crypto payments.
 
@@ -25,7 +25,7 @@ A decentralized collaboration and chat platform built on the **Sui Blockchain**,
 - **Secure Context**: Only active pods and members can interact.
 - **History Management**: Clear chat history or delete entire pods with admin controls.
 
-### 💸 Crypto Payments (Coming Soon)
+### 💸 Crypto Payments 
 - **Direct Transfers**: Send SUI tokens directly to pod members without leaving the chat interface.
 - **Integrated Controls**: Manage funds and payments from the Pod Dashboard.
 
