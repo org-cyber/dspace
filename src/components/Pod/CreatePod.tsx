@@ -34,6 +34,7 @@ export function CreatePod({ onCreated }: { onCreated: (podId: string) => void })
             arguments: [tx.pure.vector("address", memberList)],
         });
 
+        // ⚡ Minimal TS Fix: cast transaction argument to any
         signAndExecuteTransaction(
             {
                 transaction: tx,
@@ -41,18 +42,19 @@ export function CreatePod({ onCreated }: { onCreated: (podId: string) => void })
                     showEffects: true,
                     showObjectChanges: true,
                 },
-            },
+            } as any,
             {
                 onSuccess: async (result) => {
                     console.log("Transaction result:", result);
 
-                    let created = result.effects?.created?.[0]?.reference?.objectId;
+                    // ⚡ Minimal TS Fix: cast effects to any
+                    let effects: any = result.effects;
+                    let created = effects?.created?.[0]?.reference?.objectId;
 
                     // Fallback: if effects are missing but we have a digest, fetch it
                     if (!created && result.digest) {
                         try {
-                            console.log("Fetching transaction details for digest:", result.digest);
-                            const txResp = await client.waitForTransaction({
+                            const txResp: any = await client.waitForTransaction({
                                 digest: result.digest,
                                 options: { showEffects: true }
                             });
@@ -77,9 +79,8 @@ export function CreatePod({ onCreated }: { onCreated: (podId: string) => void })
                         }).catch(err => {
                             console.error("Firebase save failed", err);
                             setLoading(false);
-                            // Alert user about Firebase rules if that's the likely cause
                             if (err.code === 'PERMISSION_DENIED') {
-                                alert("Firebase Permission Denied. Please update your Firebase Database Rules to allow public read/write for this hackathon demo, or implement a custom auth backend.");
+                                alert("Firebase Permission Denied. Update your rules or implement auth backend.");
                             }
                             onCreated(created);
                         });

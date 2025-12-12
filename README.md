@@ -1,6 +1,6 @@
 # DSpace - SuiPod Chat
 
-A decentralized collaboration and chat platform built on the **Sui Blockchain**, featuring real-time messaging, pod-based group management, and seamless crypto payments.
+A decentralized collaboration and Hybrid chat platform built on the **Sui Blockchain** and **Firebase**, featuring real-time messaging, pod-based group management, and seamless crypto payments.
 
 ![Sui](https://img.shields.io/badge/Blockchain-Sui-blue?style=for-the-badge&logo=sui)
 ![React](https://img.shields.io/badge/Frontend-React-61DAFB?style=for-the-badge&logo=react)
