@@ -151,13 +151,15 @@ export function Home() {
             {/* Header */}
             <div className="glass-panel sticky" style={{ top: '1rem', zIndex: 100, padding: '1.5rem', marginBottom: '2rem' }}>
                 <div className="justify-between flex-row">
-                    <div className="flex-row">
-                        <div style={{ padding: '0.5rem', background: 'linear-gradient(to top right, #a855f7, #06b6d4)', borderRadius: '0.5rem' }}>
-                            <Zap className="text-white" size={24} />
-                        </div>
+                    <div className="flex-row" style={{ gap: '0.75rem' }}>
+                        <img
+                            src="https://cryptologos.cc/logos/sui-sui-logo.png?v=040"
+                            alt="Sui Logo"
+                            style={{ height: '32px', width: 'auto' }}
+                        />
                         <h1 className="text-2xl text-white">
-                            <span style={{ opacity: 0.8 }}>Sui</span>
-                            <span className="gradient-text">Pods</span>
+                            <span style={{ opacity: 0.8 }}>D</span>
+                            <span className="gradient-text">Space</span>
                         </h1>
                     </div>
                     <ConnectButton />
@@ -178,7 +180,7 @@ export function Home() {
                             <Globe size={100} />
                         </div>
                         <h2 className="text-xl text-white flex-row" style={{ marginBottom: '1rem', position: 'relative', zIndex: 1 }}>
-                            🔗 Join a Pod
+                            Join a Pod
                         </h2>
                         <p className="text-sm text-secondary" style={{ marginBottom: '1rem', position: 'relative', zIndex: 1 }}>
                             Have an ID? Paste it below to jump straight into the action.
@@ -207,7 +209,7 @@ export function Home() {
                 <div className="main-content">
                     <div className="justify-between flex-row" style={{ marginBottom: '1.5rem' }}>
                         <h2 className="text-2xl text-white flex-row">
-                            <span className="text-2xl">📡</span>
+                            <span className="text-2xl"></span>
                             Active Pods
                         </h2>
                         <div className="text-sm text-secondary glass" style={{ padding: '0.25rem 0.75rem', borderRadius: '50px' }}>

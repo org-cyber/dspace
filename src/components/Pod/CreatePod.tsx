@@ -140,7 +140,7 @@ export function CreatePod({ onCreated }: { onCreated: (podId: string) => void })
                 {loading ? (
                     <Loader2 className="spinner" size={20} />
                 ) : (
-                    <span>🚀</span>
+                    <span></span>
                 )}
                 <span>{loading ? 'Creating...' : 'Create Pod'}</span>
             </button>

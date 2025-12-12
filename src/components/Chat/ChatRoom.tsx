@@ -13,6 +13,7 @@ export function ChatRoom({ podId, onExit }: { podId: string; onExit: () => void 
     const account = useCurrentAccount();
     const [messages, setMessages] = useState<Message[]>([]);
     const [podName, setPodName] = useState("");
+    const [members, setMembers] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
     const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
 
@@ -20,11 +21,13 @@ export function ChatRoom({ podId, onExit }: { podId: string; onExit: () => void 
     useEffect(() => {
         if (!podId) return;
 
-        // Fetch pod name
-        const nameRef = ref(db, `pods/${podId}/metadata/name`);
-        get(nameRef).then((snapshot) => {
+        // Fetch pod metadata (name + members)
+        const metaRef = ref(db, `pods/${podId}/metadata`);
+        get(metaRef).then((snapshot) => {
             if (snapshot.exists()) {
-                setPodName(snapshot.val());
+                const data = snapshot.val();
+                setPodName(data.name || "Chat Pod");
+                setMembers(data.members || []);
             }
         });
 
@@ -52,6 +55,16 @@ export function ChatRoom({ podId, onExit }: { podId: string; onExit: () => void 
         push(messagesRef, {
             sender: account.address,
             text,
+            timestamp: Date.now(),
+        });
+    };
+
+    const handlePaymentSuccess = (amount: string, recipient: string) => {
+        if (!account) return;
+        const messagesRef = ref(db, `pods/${podId}/messages`);
+        push(messagesRef, {
+            sender: account.address,
+            text: `💸 Sent ${amount} SUI to ${recipient.slice(0, 6)}...${recipient.slice(-4)}`,
             timestamp: Date.now(),
         });
     };
@@ -136,8 +149,10 @@ export function ChatRoom({ podId, onExit }: { podId: string; onExit: () => void 
                 <PodControls
                     podId={podId}
                     isAdmin={true} // For MVP, showing to everyone. Contract will enforce permission.
+                    members={members}
                     onDeletePod={handleDeletePod}
                     onClearHistory={handleClearHistory}
+                    onPaymentSuccess={handlePaymentSuccess}
                     compact={true}
                 />
             </div>

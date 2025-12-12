@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSignAndExecuteTransaction } from "@mysten/dapp-kit";
+import { useSignAndExecuteTransaction, useCurrentAccount } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
 import { PACKAGE_ID, MODULE_NAME } from "../../lib/sui.ts";
 import { Loader2, Trash2, Eraser, DollarSign } from "lucide-react";
@@ -7,17 +7,30 @@ import { Loader2, Trash2, Eraser, DollarSign } from "lucide-react";
 interface PodControlsProps {
     podId: string;
     isAdmin: boolean;
+    members?: string[];
     onDeletePod: () => void;
     onClearHistory: () => void;
+    onPaymentSuccess?: (amount: string, to: string) => void;
     compact?: boolean;
 }
 
-export function PodControls({ podId, isAdmin, onDeletePod, onClearHistory, compact = false }: PodControlsProps) {
+export function PodControls({
+    podId,
+    isAdmin,
+    members = [],
+    onDeletePod,
+    onClearHistory,
+    onPaymentSuccess,
+    compact = false
+}: PodControlsProps) {
     const [payRecipient, setPayRecipient] = useState("");
     const [payAmount, setPayAmount] = useState("");
     const [paying, setPaying] = useState(false);
     const [showPay, setShowPay] = useState(!compact); // Access state for payment form
     const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+    const account = useCurrentAccount();
+
+    const availableRecipients = members.filter(m => m !== account?.address);
 
     const handlePay = () => {
         if (!payRecipient || !payAmount) return;
@@ -40,7 +53,10 @@ export function PodControls({ podId, isAdmin, onDeletePod, onClearHistory, compa
             {
                 onSuccess: () => {
                     setPaying(false);
-                    alert("Payment sent!");
+                    // alert("Payment sent!"); // Removed alert in favor of chat message
+                    if (onPaymentSuccess) {
+                        onPaymentSuccess(payAmount, payRecipient);
+                    }
                     setPayRecipient("");
                     setPayAmount("");
                     if (compact) setShowPay(false);
@@ -111,14 +127,30 @@ export function PodControls({ podId, isAdmin, onDeletePod, onClearHistory, compa
                     borderTop: compact ? 'none' : '1px solid rgba(255,255,255,0.1)', paddingTop: compact ? '0.5rem' : '1.25rem'
                 }} className={compact ? 'animate-slide-in-up' : ''}>
                     <div style={{ flex: 1, minWidth: '150px' }}>
-                        <label className="input-label" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Recipient Address</label>
-                        <input
-                            type="text"
-                            value={payRecipient}
-                            onChange={(e) => setPayRecipient(e.target.value)}
-                            placeholder="0x..."
-                            className="input-field font-mono text-sm"
-                        />
+                        <label className="input-label" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Recipient</label>
+                        {availableRecipients.length > 0 ? (
+                            <select
+                                value={payRecipient}
+                                onChange={(e) => setPayRecipient(e.target.value)}
+                                className="input-field font-mono text-sm"
+                                style={{ appearance: 'none', backgroundImage: 'none' }} // Simple styling, browser native dropdown is fine
+                            >
+                                <option value="" disabled>Select Member</option>
+                                {availableRecipients.map(m => (
+                                    <option key={m} value={m}>
+                                        {m.slice(0, 6)}...{m.slice(-4)}
+                                    </option>
+                                ))}
+                            </select>
+                        ) : (
+                            <input
+                                type="text"
+                                value={payRecipient}
+                                onChange={(e) => setPayRecipient(e.target.value)}
+                                placeholder="0x..."
+                                className="input-field font-mono text-sm"
+                            />
+                        )}
                     </div>
                     <div style={{ width: '120px' }}>
                         <label className="input-label" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Amount (SUI)</label>
