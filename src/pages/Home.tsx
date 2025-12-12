@@ -3,7 +3,7 @@ import { CreatePod } from "../components/Pod/CreatePod.tsx";
 import { ChatRoom } from "../components/Chat/ChatRoom.tsx";
 import { PodList } from "../components/Pod/PodList.tsx";
 import { ConnectButton, useCurrentAccount, useWallets, useConnectWallet } from "@mysten/dapp-kit";
-import { ExternalLink, Info, Globe, Zap } from "lucide-react";
+import { ExternalLink, Info, Globe, Zap, Copy, Check } from "lucide-react";
 
 export function Home() {
     const [podId, setPodId] = useState<string | null>(null);
@@ -12,7 +12,35 @@ export function Home() {
     const [isIframe] = useState(() => window.self !== window.top);
 
     const wallets = useWallets();
+    const [copied, setCopied] = useState(false);
     const { mutate: connect } = useConnectWallet();
+
+    const handleCopyAddress = async () => {
+        if (account?.address) {
+            try {
+                await navigator.clipboard.writeText(account.address);
+                console.log("Address copied:", account.address);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            } catch (err) {
+                console.error("Failed to copy:", err);
+                // Fallback for some browsers or insecure contexts
+                try {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = account.address;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand("copy");
+                    document.body.removeChild(textArea);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                } catch (fallbackErr) {
+                    console.error("Fallback copy failed:", fallbackErr);
+                    alert("Could not copy address automatically.");
+                }
+            }
+        }
+    };
 
     const handleWebLogin = () => {
         console.log("Available wallets:", wallets.map(w => w.name));
@@ -162,7 +190,34 @@ export function Home() {
                             <span className="gradient-text">Space</span>
                         </h1>
                     </div>
-                    <ConnectButton />
+                    <div className="flex-row" style={{ gap: '0.5rem', alignItems: 'center' }}>
+                        {account && (
+                            <button
+                                onClick={handleCopyAddress}
+                                className="glass center-content"
+                                style={{
+                                    padding: '0.5rem',
+                                    borderRadius: '12px',
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s',
+                                    height: '36px',
+                                    width: '36px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                                title="Copy Wallet Address"
+                            >
+                                {copied ? (
+                                    <Check size={16} color="#4ade80" />
+                                ) : (
+                                    <Copy size={16} color="rgba(255,255,255,0.7)" />
+                                )}
+                            </button>
+                        )}
+                        <ConnectButton />
+                    </div>
                 </div>
             </div>
 
