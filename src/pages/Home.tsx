@@ -53,29 +53,11 @@ export function Home() {
             // Fallback to Burner if available
             const burner = wallets.find(w => w.name.toLowerCase().includes('burner'));
             if (burner) {
-                if (confirm("Stashed (Google) wallet not detected. Connect with a temporary Burner Wallet instead?")) {
+                if (confirm("Connect with a temporary Burner Wallet instead?")) {
                     connect({ wallet: burner });
                 }
             } else {
                 alert(`Web wallet not found. Available wallets: ${wallets.map(w => w.name).join(', ') || 'None'}. Please try 'Open in New Tab'.`);
-            }
-        }
-    };
-
-    const handleMetaMaskLogin = () => {
-        if (isIframe) {
-            if (confirm("MetaMask cannot be detected in this preview window due to browser security restrictions. Open in a new tab to connect?")) {
-                window.open(window.location.href, "_blank");
-            }
-            return;
-        }
-
-        const metamask = wallets.find(w => w.name.toLowerCase().includes('metamask'));
-        if (metamask) {
-            connect({ wallet: metamask });
-        } else {
-            if (confirm("MetaMask Sui Snap not detected in your wallet list. \n\n1. Ensure you have MetaMask installed.\n2. Ensure you have the Sui Snap installed.\n3. Ensure you are NOT in Incognito mode.\n\nWould you like to install the Sui Snap now?")) {
-                window.open("https://snaps.metamask.io/snap/npm/mysten/sui-snap/", "_blank");
             }
         }
     };
@@ -92,9 +74,13 @@ export function Home() {
                 <div className="glass-card animate-slide-in-up" style={{ width: '100%', maxWidth: '480px', textAlign: 'center' }}>
                     {/* Logo/Title */}
                     <div style={{ marginBottom: '2rem' }}>
-                        <h1 className="gradient-text animate-gradient" style={{ fontSize: '3rem', marginBottom: '1rem' }}>
-                            Sui Pod Chat
-                        </h1>
+                        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+                            <img
+                                src="/dspace writeup.png"
+                                alt="Dspace"
+                                style={{ height: 'auto', maxWidth: '280px', width: '100%', objectFit: 'contain' }}
+                            />
+                        </div>
                         <p className="text-secondary">Connect your wallet to start chatting</p>
                     </div>
 
@@ -112,16 +98,9 @@ export function Home() {
                             className="btn btn-secondary w-full"
                         >
                             <Globe size={20} />
-                            <span>Google / Burner</span>
+                            <span> Burner Wallet</span>
                         </button>
 
-                        <button
-                            onClick={handleMetaMaskLogin}
-                            className="btn btn-secondary w-full"
-                        >
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" style={{ width: '20px', height: '20px' }} />
-                            <span>MetaMask</span>
-                        </button>
 
                         <div className="glass w-full" style={{ padding: '1rem', borderRadius: 'var(--radius-md)', textAlign: 'left' }}>
                             <div className="flex-row" style={{ alignItems: 'flex-start' }}>
@@ -181,11 +160,11 @@ export function Home() {
                 <div className="justify-between flex-row">
                     <div className="flex-row" style={{ gap: '0.75rem' }}>
                         <img
-                            src="https://cryptologos.cc/logos/sui-sui-logo.png?v=040"
-                            alt="Sui Logo"
+                            src="/dspace logo.png"
+                            alt="DSpace Logo"
                             style={{ height: '32px', width: 'auto' }}
                         />
-                        <h1 className="text-2xl text-white">
+                        <h1 className="text-2xl text-primary">
                             <span style={{ opacity: 0.8 }}>D</span>
                             <span className="gradient-text">Space</span>
                         </h1>
@@ -234,7 +213,7 @@ export function Home() {
                         <div style={{ position: 'absolute', top: 0, right: 0, padding: '1rem', opacity: 0.1 }}>
                             <Globe size={100} />
                         </div>
-                        <h2 className="text-xl text-white flex-row" style={{ marginBottom: '1rem', position: 'relative', zIndex: 1 }}>
+                        <h2 className="text-xl text-primary flex-row" style={{ marginBottom: '1rem', position: 'relative', zIndex: 1 }}>
                             Join a Pod
                         </h2>
                         <p className="text-sm text-secondary" style={{ marginBottom: '1rem', position: 'relative', zIndex: 1 }}>
@@ -263,7 +242,7 @@ export function Home() {
                 {/* Main Content / Marketplace */}
                 <div className="main-content">
                     <div className="justify-between flex-row" style={{ marginBottom: '1.5rem' }}>
-                        <h2 className="text-2xl text-white flex-row">
+                        <h2 className="text-2xl text-primary flex-row">
                             <span className="text-2xl"></span>
                             Active Pods
                         </h2>

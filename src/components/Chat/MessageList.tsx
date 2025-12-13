@@ -26,8 +26,8 @@ export function MessageList({ messages, currentAddress }: { messages: Message[];
                             style={{
                                 maxWidth: '80%', padding: '1rem', borderRadius: '1rem', position: 'relative', wordBreak: 'break-word',
                                 borderTopRightRadius: isMe ? '0.125rem' : '1rem', borderTopLeftRadius: isMe ? '1rem' : '0.125rem',
-                                background: isMe ? 'linear-gradient(135deg, #7c3aed, #4f46e5)' : 'var(--glass-bg)',
-                                color: 'white',
+                                background: isMe ? 'linear-gradient(135deg, #7c3aed, #4f46e5)' : 'white',
+                                color: isMe ? 'white' : 'var(--text-primary)',
                                 boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
                             }}
                         >

@@ -76,6 +76,8 @@ export function CreatePod({ onCreated }: { onCreated: (podId: string) => void })
                         }).then(() => {
                             setLoading(false);
                             onCreated(created);
+                            console.log("Created Pod Object ID:", created);
+
                         }).catch(err => {
                             console.error("Firebase save failed", err);
                             setLoading(false);
@@ -103,7 +105,7 @@ export function CreatePod({ onCreated }: { onCreated: (podId: string) => void })
 
     return (
         <div className="glass-card zoom-in">
-            <h2 className="text-xl text-white flex-row mb-4">
+            <h2 className="text-xl text-primary flex-row mb-4">
                 Create a Pod
             </h2>
 

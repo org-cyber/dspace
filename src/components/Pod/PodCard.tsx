@@ -32,7 +32,8 @@ export function PodCard({ pod, onJoin }: PodCardProps) {
                 style={{
                     position: 'absolute', inset: 0,
                     background: 'linear-gradient(to bottom right, rgba(168, 85, 247, 0.1), transparent)',
-                    opacity: 0, transition: 'opacity 0.3s'
+                    opacity: 0, transition: 'opacity 0.3s',
+                    pointerEvents: 'none'
                 }}
                 className="hover-overlay"
             />
@@ -43,7 +44,7 @@ export function PodCard({ pod, onJoin }: PodCardProps) {
             >
                 <div style={{ flex: 1, overflow: 'hidden', paddingRight: '1rem' }}>
                     <h3
-                        className="text-xl text-white"
+                        className="text-xl text-primary"
                         style={{ margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
                     >
                         {pod.name || "Untitled Pod"}
@@ -56,9 +57,9 @@ export function PodCard({ pod, onJoin }: PodCardProps) {
                             display: 'inline-block',
                             marginTop: '0.25rem',
                             padding: '0.125rem 0.5rem',
-                            background: 'rgba(30, 41, 59, 0.5)',
+                            background: 'var(--bg-secondary)',
                             borderRadius: '0.375rem',
-                            border: '1px solid rgba(51, 65, 85, 0.5)'
+                            border: '1px solid var(--glass-border)'
                         }}
                     >
                         {pod.id.slice(0, 6)}...{pod.id.slice(-4)}
@@ -108,12 +109,12 @@ export function PodCard({ pod, onJoin }: PodCardProps) {
                     className="flex-row"
                     style={{
                         alignItems: 'center',
-                        background: 'rgba(255, 255, 255, 0.05)',
+                        background: 'var(--bg-secondary)',
                         padding: '0.5rem',
                         borderRadius: '0.5rem',
                         gap: '0.5rem',
                         fontSize: '0.75rem',
-                        color: '#cbd5e1'
+                        color: 'var(--text-secondary)'
                     }}
                 >
                     <Users size={14} style={{ color: '#c084fc' }} />
@@ -124,12 +125,12 @@ export function PodCard({ pod, onJoin }: PodCardProps) {
                     className="flex-row"
                     style={{
                         alignItems: 'center',
-                        background: 'rgba(255, 255, 255, 0.05)',
+                        background: 'var(--bg-secondary)',
                         padding: '0.5rem',
                         borderRadius: '0.5rem',
                         gap: '0.5rem',
                         fontSize: '0.75rem',
-                        color: '#cbd5e1'
+                        color: 'var(--text-secondary)'
                     }}
                 >
                     <Clock size={14} style={{ color: '#22d3ee' }} />

@@ -138,14 +138,14 @@ export function ChatRoom({ podId, onExit }: { podId: string; onExit: () => void 
                         <span style={{ fontSize: '1.25rem' }}>💬</span>
                     </div>
                     <div>
-                        <h2 className="text-xl text-white" style={{ margin: 0 }}>{podName || "Chat Pod"}</h2>
+                        <h2 className="text-xl text-primary" style={{ margin: 0 }}>{podName || "Chat Pod"}</h2>
                         <span className="font-mono text-secondary" style={{ fontSize: '0.75rem' }}>ID: {podId.slice(0, 6)}...{podId.slice(-4)}</span>
                     </div>
                 </div>
                 <button onClick={onExit} className="btn btn-secondary text-sm">Back</button>
             </div>
 
-            <div style={{ padding: '0.5rem 1rem', borderBottom: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)' }}>
+            <div style={{ padding: '0.5rem 1rem', borderBottom: '1px solid var(--glass-border)', background: 'var(--bg-secondary)' }}>
                 <PodControls
                     podId={podId}
                     isAdmin={true} // For MVP, showing to everyone. Contract will enforce permission.
@@ -157,7 +157,7 @@ export function ChatRoom({ podId, onExit }: { podId: string; onExit: () => void 
                 />
             </div>
 
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: 'rgba(0,0,0,0.2)', overflow: 'hidden' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: 'var(--bg-secondary)', overflow: 'hidden' }}>
                 <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
                     <MessageList messages={messages} currentAddress={account?.address || ""} />
                 </div>

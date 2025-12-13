@@ -21,7 +21,7 @@ export function MessageInput({ onSend }: { onSend: (text: string) => void }) {
                     onChange={(e) => setText(e.target.value)}
                     placeholder="Type a message..."
                     className="input-field"
-                    style={{ borderRadius: '9999px', padding: '1rem 1.5rem', background: 'rgba(15, 23, 42, 0.6)' }}
+                    style={{ borderRadius: '9999px', padding: '1rem 1.5rem', background: 'white', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}
                 />
             </div>
             <button

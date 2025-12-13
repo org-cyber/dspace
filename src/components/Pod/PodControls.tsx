@@ -74,9 +74,8 @@ export function PodControls({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', transition: 'all 0.3s' }} className={compact ? '' : 'glass-card'}>
             <div className="justify-between flex-row" style={{ flexWrap: 'wrap' }}>
                 {!compact && (
-                    <h3 className="text-xl text-white flex-row">
+                    <h3 className="text-xl text-primary flex-row">
                         <span>⚙️</span>
-                        Pod Controls
                     </h3>
                 )}
 
@@ -124,7 +123,7 @@ export function PodControls({
             {showPay && (
                 <div style={{
                     display: 'flex', flexDirection: 'row', gap: '0.75rem', alignItems: 'flex-end', flexWrap: 'wrap',
-                    borderTop: compact ? 'none' : '1px solid rgba(255,255,255,0.1)', paddingTop: compact ? '0.5rem' : '1.25rem'
+                    borderTop: compact ? 'none' : '1px solid var(--glass-border)', paddingTop: compact ? '0.5rem' : '1.25rem'
                 }} className={compact ? 'animate-slide-in-up' : ''}>
                     <div style={{ flex: 1, minWidth: '150px' }}>
                         <label className="input-label" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Recipient</label>

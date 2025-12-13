@@ -43,8 +43,8 @@ export function PodList({ onJoin }: { onJoin: (id: string) => void }) {
         return (
             <div className="text-center p-12 glass-card rounded-2xl border-2 border-dashed border-slate-600">
                 <div className="text-6xl mb-4">📭</div>
-                <p className="text-slate-300 text-lg">No active pods found</p>
-                <p className="text-slate-400 text-sm mt-2">Create one to get started!</p>
+                <p className="text-secondary text-lg">No active pods found</p>
+                <p className="text-muted text-sm mt-2">Create one to get started!</p>
             </div>
         );
     }
