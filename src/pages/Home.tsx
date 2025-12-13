@@ -7,7 +7,6 @@ import { ExternalLink, Info, Globe, Zap, Copy, Check } from "lucide-react";
 
 export function Home() {
     const [podId, setPodId] = useState<string | null>(null);
-    const [joinId, setJoinId] = useState("");
     const account = useCurrentAccount();
     const [isIframe] = useState(() => window.self !== window.top);
 
@@ -162,7 +161,7 @@ export function Home() {
                         <img
                             src="/dspace logo.png"
                             alt="DSpace Logo"
-                            style={{ height: '32px', width: 'auto' }}
+                            style={{ height: '60px', width: 'auto' }}
                         />
                         <h1 className="text-2xl text-primary">
                             <span style={{ opacity: 0.8 }}>D</span>
@@ -209,34 +208,7 @@ export function Home() {
                     </div>
 
                     {/* Join Pod Section */}
-                    <div className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden' }}>
-                        <div style={{ position: 'absolute', top: 0, right: 0, padding: '1rem', opacity: 0.1 }}>
-                            <Globe size={100} />
-                        </div>
-                        <h2 className="text-xl text-primary flex-row" style={{ marginBottom: '1rem', position: 'relative', zIndex: 1 }}>
-                            Join a Pod
-                        </h2>
-                        <p className="text-sm text-secondary" style={{ marginBottom: '1rem', position: 'relative', zIndex: 1 }}>
-                            Have an ID? Paste it below to jump straight into the action.
-                        </p>
-                        <div className="flex-row" style={{ position: 'relative', zIndex: 1 }}>
-                            <input
-                                type="text"
-                                value={joinId}
-                                onChange={(e) => setJoinId(e.target.value)}
-                                placeholder="Enter Object ID..."
-                                className="input-field font-mono text-sm"
-                            />
-                            <button
-                                onClick={() => {
-                                    if (joinId.trim()) setPodId(joinId.trim());
-                                }}
-                                className="btn btn-primary"
-                            >
-                                Go
-                            </button>
-                        </div>
-                    </div>
+
                 </div>
 
                 {/* Main Content / Marketplace */}

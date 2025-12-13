@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { ref, onValue } from "firebase/database";
 import { db } from "../../lib/firebase.ts";
 import { PodCard, type PodMetadata } from "./PodCard.tsx";
-import { Loader2 } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 
 export function PodList({ onJoin }: { onJoin: (id: string) => void }) {
     const [pods, setPods] = useState<PodMetadata[]>([]);
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         const podsRef = ref(db, "pods");
@@ -31,6 +32,11 @@ export function PodList({ onJoin }: { onJoin: (id: string) => void }) {
         return () => unsubscribe();
     }, []);
 
+    const filteredPods = pods.filter(pod =>
+        (pod.name?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+        pod.id.includes(searchTerm)
+    );
+
     if (loading) {
         return (
             <div className="flex justify-center p-12">
@@ -39,31 +45,44 @@ export function PodList({ onJoin }: { onJoin: (id: string) => void }) {
         );
     }
 
-    if (pods.length === 0) {
-        return (
-            <div className="text-center p-12 glass-card rounded-2xl border-2 border-dashed border-slate-600">
-                <div className="text-6xl mb-4">📭</div>
-                <p className="text-secondary text-lg">No active pods found</p>
-                <p className="text-muted text-sm mt-2">Create one to get started!</p>
-            </div>
-        );
-    }
-
     return (
-        <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-            gap: '1.5rem'
-        }}>
-            {pods.map((pod, index) => (
-                <div
-                    key={pod.id}
-                    className="animate-slide-in-up"
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                    <PodCard pod={pod} onJoin={onJoin} />
+        <div className="flex-col gap-4">
+            {/* Search Bar */}
+            <div className="glass-panel" style={{ padding: '0.75rem 1rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <Search size={20} className="text-secondary" />
+                <input
+                    type="text"
+                    placeholder="Search pods by name or ID..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="input-field"
+                    style={{ border: 'none', background: 'transparent', padding: 0, boxShadow: 'none' }}
+                />
+            </div>
+
+            {filteredPods.length === 0 ? (
+                <div className="text-center p-12 glass-card rounded-2xl border-2 border-dashed border-slate-600">
+                    <div className="text-6xl mb-4">📭</div>
+                    <p className="text-secondary text-lg">No matching pods found</p>
+                    <p className="text-muted text-sm mt-2">Try a different search term or create a new pod!</p>
                 </div>
-            ))}
+            ) : (
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                    gap: '1.5rem'
+                }}>
+                    {filteredPods.map((pod, index) => (
+                        <div
+                            key={pod.id}
+                            className="animate-slide-in-up"
+                            style={{ animationDelay: `${index * 0.1}s` }}
+                        >
+                            <PodCard pod={pod} onJoin={onJoin} />
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
