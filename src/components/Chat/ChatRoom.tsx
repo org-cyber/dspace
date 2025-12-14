@@ -64,7 +64,7 @@ export function ChatRoom({ podId, onExit }: { podId: string; onExit: () => void 
         const messagesRef = ref(db, `pods/${podId}/messages`);
         push(messagesRef, {
             sender: account.address,
-            text: `💸 Sent ${amount} SUI to ${recipient.slice(0, 6)}...${recipient.slice(-4)}`,
+            text: `Sent ${amount} SUI to ${recipient.slice(0, 6)}...${recipient.slice(-4)}`,
             timestamp: Date.now(),
         });
     };
